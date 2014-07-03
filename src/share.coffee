@@ -26,6 +26,7 @@ class Share extends ShareUtils
         button_text: 'Share'
         button_font: true
         icon_font: true
+        disable_css: false
 
       networks:
         google_plus:
@@ -99,7 +100,7 @@ class Share extends ShareUtils
     instance = document.querySelectorAll(element)[index] # TODO: Use more efficient method.
 
     ## Inject HTML and CSS
-    @inject_css(instance)
+    if @config.ui.disable_css then @inject_css(instance)
     @inject_html(instance)
 
     ## Show instance
@@ -213,7 +214,7 @@ class Share extends ShareUtils
       link.setAttribute("rel", "stylesheet")
       link.setAttribute("href", url)
       @el.head.appendChild(link)
-  
+
   inject_css: (instance) ->
     selector = ".#{instance.getAttribute('class').split(" ").join(".")}"
 
@@ -229,7 +230,7 @@ class Share extends ShareUtils
         style.styleSheet.cssText = css
       else
         style.appendChild document.createTextNode(css)
-      
+
       @el.head.appendChild style
 
       delete @config.selector # TODO: Temporary
@@ -284,7 +285,7 @@ class Share extends ShareUtils
 
       @config.networks[network].display = display
 
-  
+
   normalize_network_configuration: ->
     ## Don't load FB SDK if FB app_id isn't present
     unless @config.networks.facebook.app_id
